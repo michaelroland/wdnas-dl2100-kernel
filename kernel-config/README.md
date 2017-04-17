@@ -19,5 +19,5 @@ and the default configuration from the
 Instead of the generic default configuration, you can create configurations
 for specific kernel versions. Configuration files must be named
 <samp>wd-dl2100-X.Y.Z.config</samp>, where X.Y.Z is the kernel version (as
-output by <samp>make kernelversion</samp>.
+output by <samp>make kernelversion</samp>).
 

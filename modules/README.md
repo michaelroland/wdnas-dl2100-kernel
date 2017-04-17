@@ -11,9 +11,8 @@ sub-directories. Compressed tar archives are automatically unpacked by the
 module build script.
 
 Each module must consist of a directory with a sub-directory <samp>src/</samp>.
-The sub-directory <samp>src/</samp> is expected to contain the Makefile for
-building the module. The targeted kernel release is passed in the variable
-<samp>BUILD\_KERNEL</samp>.
+This sub-directory is expected to contain the Makefile for building the module.
+The targeted kernel release is passed in the variable <samp>BUILD\_KERNEL</samp>.
 
 
 ### List of required modules

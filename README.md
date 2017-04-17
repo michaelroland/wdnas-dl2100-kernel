@@ -33,8 +33,8 @@ architecture, which matches the processor architecture of the DL2100.
 
 ### Prerequisites
 
-The packages kernel-package, libncurses-dev, and fakeroot need to be installed
-in order to use the tools:
+The packages *kernel-package*, *libncurses-dev*, and *fakeroot* need to be
+installed in order to use the tools:
 
     apt install kernel-package libncurses-dev fakeroot
 
@@ -44,20 +44,19 @@ distribution:
     apt install linux-source
 
 You will then have a tar archive with the Linux kernel sources at
-<samp>/usr/src/linux-source-*.tar.*</samp> (e.g.
-<samp>/usr/src/linux-source-3.16.tar.xz</samp> for Linux kernel 3.16 packaged
-for Debian 8).
+<samp>/usr/src/linux-source-\*.tar.\*</samp> (e.g. with Linux kernel 3.16
+packaged for Debian 8 this is <samp>/usr/src/linux-source-3.16.tar.xz</samp>).
 
 
 ### Structure of this repository
 
 - <samp>kernel-config/</samp>: Folder containing kernel configuration files (see
-  [Configurations](kernel-config/README.md)).
+  [Configurations](kernel-config/#configurations)).
 - <samp>kernel-patches/</samp>: Folder containing patches to apply against the
-  kernel source tree (see [Patches](kernel-patches/README.md)).
+  kernel source tree (see [Patches](kernel-patches/#patches)).
 - <samp>kernel/</samp>: Folder for storing and extracting kernel sources.
 - <samp>modules/</samp>: Folder containing additional kernel modules (see
-  [Modules](modules/README.md)).
+  [Modules](modules/#modules)).
 - <samp>\*.sh</samp>: Tools for building and installing.
 
 
@@ -101,7 +100,7 @@ packages created in the previous section, you could use:
 ### Building additional modules
 
 The Western Digital My Cloud DL2100 NAS System requires some additional kernel
-modules (see [Modules](modules/README.md)). You can build these modules with the
+modules (see [Modules](modules/#modules)). You can build these modules with the
 script <samp>[build-modules.sh](build-modules.sh)</samp>. The script takes the
 kernel release as argument (defaults to the currently running kernel). For
 instance, to target the previously built and installed kernel, you could use:
