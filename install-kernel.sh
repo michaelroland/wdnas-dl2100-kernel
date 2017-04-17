@@ -26,7 +26,7 @@ SCRIPT_NAME=$(basename $0)
 SCRIPT_PATH=$(readlink -f "$(dirname $0)")
 
 currentdir=$(pwd)
-kernelbasedir=$currentdir/kernel
+kernelbasedir=${currentdir}/kernel
 
 usage() {
 	echo "Usage: ${SCRIPT_NAME} [options] kernel-source"
@@ -69,44 +69,40 @@ if [ -z "$1" ] ; then
 fi
 
 kerneldir=$(readlink -f $1)
-kernelextractdir=$kerneldir
+kernelextractdir=${kerneldir}
 
-if [ -f $kerneldir ] ; then
-	kernelextractdir=$(tar -tf $kerneldir | sed -e 's@/.*@@' | uniq)
-	if [ "$(echo "$kernelextractdir" | wc -l)" -ne "1" ] ; then
-		echo "${SCRIPT_NAME}: $kerneldir is not a valid kernel source package" >&2
+if [ -f ${kerneldir} ] ; then
+	kernelextractdir=$(tar -tf ${kerneldir} | sed -e 's@/.*@@' | uniq)
+	if [ "$(echo "${kernelextractdir}" | wc -l)" -ne "1" ] ; then
+		echo "${SCRIPT_NAME}: ${kerneldir} is not a valid kernel source package" >&2
 		exit 2
 	fi
 
-	kernelextractdir=$kernelbasedir/$kerneldir
+	kernelextractdir=${kernelbasedir}/${kerneldir}
 fi
 
-if [ ! -d $kernelextractdir ] ; then
-	echo "${SCRIPT_NAME}: $kernelextractdir is not a directory" >&2
+if [ ! -d ${kernelextractdir} ] ; then
+	echo "${SCRIPT_NAME}: ${kernelextractdir} is not a directory" >&2
 	exit 4
 fi
 
-cd $kernelextractdir
+cd ${kernelextractdir}
 
-kernelver=$(make kernelversion)
-if [ "$?" -ne "0" ] ; then
-	echo "${SCRIPT_NAME}: $kernelextractdir is not a valid kernel source tree" >&2
-	exit 4
-fi
-if [ -f .localversion ] ; then
-        localkernelver=$(cat .localversion)
+kernelrel=""
+if [ -f .localrelease ] ; then
+        kernelrel=$(cat .localrelease)
 else
-        echo "${SCRIPT_NAME}: missing file .localversion -- did you build?"
+        echo "${SCRIPT_NAME}: missing file .localrelease -- did you build?"
+	exit 6
 fi
 
-kernelrel=$(make kernelrelease LOCALVERSION=$localkernelver)
 kernelsuffix=$(cat .version)
 
 cd ..
-echo "Installing kernel $(basename $kernelextractdir) release $kernelrel ..."
-dpkg -i linux-headers-$kernelrel_$kernelrel-$kernelsuffix_*.deb
-dpkg -i linux-libc-dev_$kernelrel-$kernelsuffix_*.deb
-dpkg -i linux-image-$kernelrel_$kernelrel-$kernelsuffix_*.deb
+echo "Installing kernel $(basename ${kernelextractdir}) release ${kernelrel} ..."
+dpkg -i linux-headers-${kernelrel}_${kernelrel}-${kernelsuffix}_*.deb
+dpkg -i linux-libc-dev_${kernelrel}-${kernelsuffix}_*.deb
+dpkg -i linux-image-${kernelrel}_${kernelrel}-${kernelsuffix}_*.deb
 
-cd $currentdir
+cd ${currentdir}
 

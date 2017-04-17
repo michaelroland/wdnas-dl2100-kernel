@@ -25,9 +25,9 @@
 SCRIPT_NAME=$(basename $0)
 SCRIPT_PATH=$(readlink -f "$(dirname $0)")
 
-kernelrel=$(uname -r)
+kernelrel="$(uname -r)"
 currentdir=$(pwd)
-modulesdir="$currentdir/modules"
+modulesdir=${currentdir}/modules
 
 usage() {
 	echo "Usage: ${SCRIPT_NAME} [options] [kernel-release]"
@@ -35,7 +35,7 @@ usage() {
 	echo ""
 	echo -e "  <kernel-release>"
 	echo -e "  \tRelease version of installed(!) kernel to build against"
-	echo -e "  \t(defaults to \"$kernelrel\")"
+	echo -e "  \t(defaults to \"${kernelrel}\")"
 	echo -e "  "
 	echo -e "Options:"
 	echo -e "\t-h          Show this message"
@@ -69,21 +69,21 @@ if [ ! -z "$1" ] ; then
 fi
 
 
-echo "Building external modules for kernel $kernelrel ..."
+echo "Building external modules for kernel ${kernelrel} ..."
 
-for modulepack in $modulesdir/*.tar.* ; do
-	if [ -f "$modulepack" ] ; then
-		echo "Unpacking module $(basename $modulepack)"
-		cd $modulesdir
-		tar -xf "$modulepack"
-		cd $currentdir
+for modulepack in ${modulesdir}/*.tar.* ; do
+	if [ -f ${modulepack} ] ; then
+		echo "Unpacking module $(basename ${modulepack})"
+		cd ${modulesdir}
+		tar -xf ${modulepack}
+		cd ${currentdir}
 	fi
 done
 
-for module in $modulesdir/*/src ; do
-	echo "Building module $(basename $module)"
-	cd $module
-	make BUILD_KERNEL=$kernelrel
-	cd $currentdir
+for module in ${modulesdir}/*/src ; do
+	echo "Building module $(basename ${module})"
+	cd ${module}
+	make BUILD_KERNEL=${kernelrel}
+	cd ${currentdir}
 done
 

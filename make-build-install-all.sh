@@ -67,10 +67,11 @@ if [ -z "$1" ] ; then
 	exit 1
 fi
 
-kerneldir=$1
+kerneldir=$(readlink -f $1)
 
-source ./build-kernel.sh $kerneldir
-sudo ./install-kernel.sh $kerneldir
-./build-modules.sh $kernelrel
-sudo ./install-modules.sh $kernelrel
+source ./build-kernel.sh ${kerneldir}
+sudo ./install-kernel.sh ${kernelextractdir}
+
+./build-modules.sh ${kernelrel}
+sudo ./install-modules.sh ${kernelrel}
 

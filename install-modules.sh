@@ -25,9 +25,9 @@
 SCRIPT_NAME=$(basename $0)
 SCRIPT_PATH=$(readlink -f "$(dirname $0)")
 
-kernelrel=$(uname -r)
+kernelrel="$(uname -r)"
 currentdir=$(pwd)
-modulesdir="$currentdir/modules"
+modulesdir=${currentdir}/modules
 
 usage() {
 	echo "Usage: ${SCRIPT_NAME} [options] [kernel-release]"
@@ -35,7 +35,7 @@ usage() {
 	echo ""
 	echo -e "  <kernel-release>"
 	echo -e "  \tRelease version of installed(!) kernel to build against"
-	echo -e "  \t(defaults to \"$kernelrel\")"
+	echo -e "  \t(defaults to \"${kernelrel}\")"
 	echo -e "  "
 	echo -e "Options:"
 	echo -e "\t-h          Show this message"
@@ -69,20 +69,21 @@ if [ ! -z "$1" ] ; then
 fi
 
 
-echo "Installing external modules for kernel $kernelver ..."
+echo "Installing external modules for kernel ${kernelver} ..."
 
-for module in $modulesdir/*/src ; do
-	echo "Building module $(basename $module)"
-	cd $module/src
-	make install BUILD_KERNEL=$kernelrel
-	cd $currentdir
+for module in ${modulesdir}/*/src ; do
+	echo "Building module $(basename ${module})"
+	cd ${module}
+	make install BUILD_KERNEL=${kernelrel}
+	cd ${currentdir}
 done
 
-depmod $kernelrel
+depmod ${kernelrel}
 
 initramfsupdate=update-initramfs.orig.initramfs-tools
-if ! command -v $initramfsupdate ; then
+if ! command -v ${initramfsupdate} ; then
 	initramfsupdate=update-initramfs
 fi
-$initramfsupdate -c -k $kernelrel
+${initramfsupdate} -c -k ${kernelrel} || ${initramfsupdate} -u -k ${kernelrel}
+
 

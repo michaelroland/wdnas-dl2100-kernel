@@ -26,9 +26,9 @@ SCRIPT_NAME=$(basename $0)
 SCRIPT_PATH=$(readlink -f "$(dirname $0)")
 
 currentdir=$(pwd)
-patchesdir=$currentdir/kernel-patches
-kernelconfigbase=$currentdir/kernel-config/wd-dl2100
-kernelbasedir=$currentdir/kernel
+patchesdir=${currentdir}/kernel-patches
+kernelconfigbase=${currentdir}/kernel-config/wd-dl2100
+kernelbasedir=${currentdir}/kernel
 localkernelver=-$(date '+%Y%m%d')-dl2100
 
 usage() {
@@ -72,37 +72,37 @@ if [ -z "$1" ] ; then
 fi
 
 kerneldir=$(readlink -f $1)
-kernelextractdir=$kerneldir
+kernelextractdir=${kerneldir}
 
 if [ -f $kerneldir ] ; then
-	kernelextractdir=$(tar -tf $kerneldir | sed -e 's@/.*@@' | uniq)
-	if [ "$(echo "$kernelextractdir" | wc -l)" -ne "1" ] ; then
-		echo "${SCRIPT_NAME}: $kerneldir is not a valid kernel source package" >&2
+	kernelextractdir=$(tar -tf ${kerneldir} | sed -e 's@/.*@@' | uniq)
+	if [ "$(echo "${kernelextractdir}" | wc -l)" -ne "1" ] ; then
+		echo "${SCRIPT_NAME}: ${kerneldir} is not a valid kernel source package" >&2
 		exit 2
 	fi
 
-	kernelextractdir=$kernelbasedir/$kernelextractdir
-	if [ -e $kernelextractdir ] ; then
+	kernelextractdir=${kernelbasedir}/${kernelextractdir}
+	if [ -e ${kernelextractdir} ] ; then
 		echo "${SCRIPT_NAME}: $kernelextractdir exists, not unpacking" >&2
-		exit 3
+		#exit 3
+	else
+		echo "Unpacking kernel source package $(basename ${kernelextractdir})"
+		cd ${kernelbasedir}
+		tar -xf ${kerneldir}
+		cd ${currentdir}
 	fi
-
-	echo "Unpacking kernel source package $(basename $kernelextractdir)"
-	cd $kernelbasedir
-	tar -xf $kerneldir
-	cd $currentdir
 fi
 
-if [ ! -d $kernelextractdir ] ; then
-	echo "${SCRIPT_NAME}: $kernelextractdir is not a directory" >&2
+if [ ! -d ${kernelextractdir} ] ; then
+	echo "${SCRIPT_NAME}: ${kernelextractdir} is not a directory" >&2
 	exit 4
 fi
 
-cd $kernelextractdir
+cd ${kernelextractdir}
 
 kernelver=$(make kernelversion)
 if [ "$?" -ne "0" ] ; then
-	echo "${SCRIPT_NAME}: $kernelextractdir is not a valid kernel source tree" >&2
+	echo "${SCRIPT_NAME}: ${kernelextractdir} is not a valid kernel source tree" >&2
 	exit 5
 fi
 
@@ -117,21 +117,25 @@ fi
 if [ -f .localversion ] ; then
 	localkernelver=$(cat .localversion)
 else
-	echo -n "$localkernelver" >.localversion
+	echo -n "${localkernelver}" >.localversion
 fi
 
-for patchfile in $patchesdir/*.patch ; do
-	if [ -f $patchfile ] ; then
-		echo "Applying patch $(basename $patchfile) ..."
-		patch -p1 -l -N <$patchfile
+for patchfile in ${patchesdir}/*.patch ; do
+	if [ -f ${patchfile} ] ; then
+		echo "Applying patch $(basename ${patchfile}) ..."
+		patch -p1 -l -N <${patchfile}
 	fi
 done
 
-kernelrel=$(make kernelrelease LOCALVERSION=$localkernelver)
+make oldconfig LOCALVERSION=${localkernelver}
+make silentoldconfig LOCALVERSION=${localkernelver}
 
-echo "Building kernel $(basename $kernelextractdir) release $kernelrel ..."
-make deb-pkg LOCALVERSION=$localkernelver
-kernelsuffix=$(cat .version)
+kernelrel=$(make kernelrelease LOCALVERSION=${localkernelver})
+echo -n "${kernelrel}" >.localrelease
 
-cd $currentdir
+echo "Building kernel $(basename ${kernelextractdir}) release ${kernelrel} ..."
+make deb-pkg LOCALVERSION=${localkernelver}
+#kernelsuffix=$(cat .version)
+
+cd ${currentdir}
 
