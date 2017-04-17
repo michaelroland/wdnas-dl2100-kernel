@@ -3,7 +3,8 @@
 This is a re-implementation of the reset button kernel module <samp>rstbtn.ko</samp>.
 That module is provided by Western Digital in binary form only. However, it seems
 that this module must be loaded in order for various WD tools (e.g. fan control)
-to work.
+to work. Hence, a re-implementation was required in order to build the module for
+other kernel version than the one provided in the WD firmware.
 
 
 ## WARNING
