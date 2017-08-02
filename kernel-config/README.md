@@ -4,7 +4,7 @@ This folder contains configurations for Linux kernels targeting Western Digital
 My Cloud DL2100 NAS Systems.
 
 
-### Default configuration: <samp>wd-dl2100-4.9.config</samp>
+### Configuration: <samp>wd-dl2100-4.9.config</samp>
 
 <samp>[wd-dl2100-4.9.config](wd-dl2100-4.9.config)</samp> is the default configuration
 for Linux 4.9 kernels for Debian 9 on the WD My Cloud DL2100 NAS. The configuration
@@ -14,10 +14,19 @@ and the default configuration from the
 [DL2100 GPL source code package (v2.30.165 20170321)](http://downloads.wdc.com/gpl/WDMyCloud_DL2100_GPL_v2.30.165_20170321.tar.gz).
 
 
+### Configuration: <samp>wd-dl2100-3.16.config</samp>
+
+<samp>[wd-dl2100-3.16.config](wd-dl2100-3.16.config)</samp> is the default configuration
+for Linux 3.16 kernels for Debian 8 on the WD My Cloud DL2100 NAS. The configuration
+is based on the default Debian kernel configuration from the Debian package
+<samp>[linux-image-3.16.0-4-amd64\_3.16.39-1+deb8u2\_amd64.deb](http://security.debian.org/debian-security/pool/updates/main/l/linux/linux-image-3.16.0-4-amd64_3.16.39-1+deb8u2_amd64.deb)</samp>
+and the default configuration from the
+[DL2100 GPL source code package (v2.21.126 20161110)](http://downloads.wdc.com/gpl/WDMyCloud_DL2100_GPL_v2.21.126_20161110.zip).
+
+
 ### Kernel-specific configuration files
 
-Instead of the generic default configuration, you can create configurations
-for specific kernel versions. Configuration files must be named
+You can create configurations for specific kernel versions by naming them
 <samp>wd-dl2100-X.Y[.Z].config</samp>, where X.Y or X.Y.Z is the kernel version.
 A configuration file with version X.Y.Z will have precedence over one with X.Y.
 X.Y.Z is the version as output by <samp>make kernelversion</samp>.
