@@ -1,7 +1,7 @@
 # Linux Kernel for Debian on Western Digital My Cloud DL2100 NAS Systems
 
 This repository contains sources for the kernel and additional modules, and a
-number of tools for building and installing the kernel on Debian (tested on jessie)
+number of tools for building and installing the kernel on Debian 9 (stretch)
 targeting Western Digital My Cloud DL2100 NAS Systems. The tools allow you to
 
 - unpack kernel source tree tar archives,
@@ -24,7 +24,7 @@ inaccuracies in this manual.*
 
 ## GETTING STARTED
 
-All scripts are designed to be run on Debian 8 (jessie) either directly on the
+All scripts are designed to be run on Debian 9 (stretch) either directly on the
 DL2100 or on any other *amd64* (x64, x86-64) architecture. The scripts will
 probably run on other Debian and Ubuntu versions too. Currently, no effort was
 taken towards cross-compilation. Hence, the requirement to build on an amd64
@@ -33,19 +33,21 @@ architecture, which matches the processor architecture of the DL2100.
 
 ### Prerequisites
 
-The packages *kernel-package*, *libncurses-dev*, and *fakeroot* need to be
-installed in order to use the tools:
+The packages *build-essential*, *fakeroot* and *libncurses5-dev*, as well as the
+dependencies to build the linux kernel package need to be installed in order to
+use the tools:
 
-    apt install kernel-package libncurses-dev fakeroot
+    sudo apt install build-essential fakeroot libncurses5-dev
+    sudo apt build-dep linux
 
 In addition, you may want to install the latest Linux kernel sources for your
 distribution:
 
-    apt install linux-source
+    sudo apt install linux-source
 
 You will then have a tar archive with the Linux kernel sources at
-<samp>/usr/src/linux-source-\*.tar.\*</samp> (e.g. with Linux kernel 3.16
-packaged for Debian 8 this is <samp>/usr/src/linux-source-3.16.tar.xz</samp>).
+<samp>/usr/src/linux-source-\*.tar.\*</samp> (e.g. with Linux kernel 4.9
+packaged for Debian 9 this is <samp>/usr/src/linux-source-4.9.tar.xz</samp>).
 
 
 ### Structure of this repository
@@ -66,13 +68,13 @@ You can extract a Linux kernel source archive, apply necessary patches and
 configuration, and build the kernel Debian packages with the script
 <samp>[build-kernel.sh](build-kernel.sh)</samp>. For instance, use the following
 command to build from the sources provided through the <samp>linux-source</samp>
-package on Debian 8:
+package on Debian 9:
 
-    ./build-kernel.sh /usr/src/linux-source-3.16.tar.xz
+    ./build-kernel.sh /usr/src/linux-source-4.9.tar.xz
 
-This will extract the source tree into <samp>./kernel/linux-source-3.16</samp>,
+This will extract the source tree into <samp>./kernel/linux-source-4.9</samp>,
 copy the base configuration from <samp>[./kernel-config/](kernel-config/)</samp>
-into <samp>./kernel/linux-source-3.16/.config</samp>, apply all patches from
+into <samp>./kernel/linux-source-4.9/.config</samp>, apply all patches from
 <samp>[./kernel-patches/](kernel-patches/)</samp>, and build the kernel. The
 resulting Debian packages will be
 
@@ -94,7 +96,7 @@ The argument to this script can either be the tar archive or the path to the
 extracted source tree. For instance, to continue with the installation of the
 packages created in the previous section, you could use:
 
-    sudo ./install-kernel.sh /usr/src/linux-source-3.16.tar.xz
+    sudo ./install-kernel.sh /usr/src/linux-source-4.9.tar.xz
 
 
 ### Building additional modules
@@ -105,7 +107,7 @@ script <samp>[build-modules.sh](build-modules.sh)</samp>. The script takes the
 kernel release as argument (defaults to the currently running kernel). For
 instance, to target the previously built and installed kernel, you could use:
 
-    ./build-modules.sh 3.16.XX-YYYYMMDD-dl2100
+    ./build-modules.sh 4.9.XX-YYYYMMDD-dl2100
 
 
 ### Installing additional modules
@@ -116,7 +118,7 @@ The script takes the kernel release as argument (defaults to the currently runni
 kernel). For instance, to target the previously built and installed kernel, you
 could use:
 
-    sudo ./install-modules.sh 3.16.XX-YYYYMMDD-dl2100
+    sudo ./install-modules.sh 4.9.XX-YYYYMMDD-dl2100
 
 This will install the modules, update module dependencies, and create an updated
 initial ramdisk (initramfs).
