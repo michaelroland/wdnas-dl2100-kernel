@@ -4,7 +4,7 @@ This folder contains configurations for Linux kernels targeting Western Digital
 My Cloud DL2100 NAS Systems.
 
 
-### Default configuration: <samp>wd-dl2100--4.9.config</samp>
+### Default configuration: <samp>wd-dl2100-4.9.config</samp>
 
 <samp>[wd-dl2100-4.9.config](wd-dl2100-4.9.config)</samp> is the default configuration
 for Linux 4.9 kernels for Debian 9 on the WD My Cloud DL2100 NAS. The configuration
