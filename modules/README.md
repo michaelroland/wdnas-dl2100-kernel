@@ -15,6 +15,13 @@ This sub-directory is expected to contain the Makefile for building the module.
 The targeted kernel release is passed in the variable <samp>BUILD\_KERNEL</samp>.
 
 
+### Version-specific modules
+
+Modules for specific kernel versions may be placed in sub-folders named
+<samp>X.Y.Z/</samp> for patches that apply to only one specific kernel version
+or <samp>X.Y/</samp> for patches that apply to a whole kernel release.
+
+
 ### List of required modules
 
 #### All kernel versions

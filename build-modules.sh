@@ -71,6 +71,45 @@ fi
 
 echo "Building external modules for kernel ${kernelrel} ..."
 
+kernelver=$(echo "${kernelrel}" |awk -F'.' '{print$1"."$2"."$3}')
+kernelvermain=$(echo "${kernelrel}" |awk -F'.' '{print$1"."$2}')
+
+if [ -d "${modulesdir}/${kernelver}" ] ; then
+    for modulepack in ${modulesdir}/${kernelver}/*.tar.* ; do
+        if [ -f ${modulepack} ] ; then
+            echo "Unpacking module $(basename ${modulepack})"
+            cd ${modulesdir}/${kernelver}
+            tar -xf ${modulepack}
+            cd ${currentdir}
+        fi
+    done
+
+    for module in ${modulesdir}/${kernelver}/*/src ; do
+        echo "Building module $(basename ${module})"
+        cd ${module}
+        make BUILD_KERNEL=${kernelrel}
+        cd ${currentdir}
+    done
+fi
+
+if [ -d "${modulesdir}/${kernelvermain}" ] ; then
+    for modulepack in ${modulesdir}/${kernelvermain}/*.tar.* ; do
+        if [ -f ${modulepack} ] ; then
+            echo "Unpacking module $(basename ${modulepack})"
+            cd ${modulesdir}/${kernelvermain}
+            tar -xf ${modulepack}
+            cd ${currentdir}
+        fi
+    done
+
+    for module in ${modulesdir}/${kernelvermain}/*/src ; do
+        echo "Building module $(basename ${module})"
+        cd ${module}
+        make BUILD_KERNEL=${kernelrel}
+        cd ${currentdir}
+    done
+fi
+
 for modulepack in ${modulesdir}/*.tar.* ; do
 	if [ -f ${modulepack} ] ; then
 		echo "Unpacking module $(basename ${modulepack})"

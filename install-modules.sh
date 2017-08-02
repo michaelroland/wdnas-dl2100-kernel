@@ -71,8 +71,29 @@ fi
 
 echo "Installing external modules for kernel ${kernelver} ..."
 
+kernelver=$(echo "${kernelrel}" |awk -F'.' '{print$1"."$2"."$3}')
+kernelvermain=$(echo "${kernelrel}" |awk -F'.' '{print$1"."$2}')
+
+if [ -d "${modulesdir}/${kernelver}" ] ; then
+    for module in ${modulesdir}/${kernelver}/*/src ; do
+        echo "Installing module $(basename ${module})"
+        cd ${module}
+        make install BUILD_KERNEL=${kernelrel}
+        cd ${currentdir}
+    done
+fi
+
+if [ -d "${modulesdir}/${kernelvermain}" ] ; then
+    for module in ${modulesdir}/${kernelvermain}/*/src ; do
+        echo "Installing module $(basename ${module})"
+        cd ${module}
+        make install BUILD_KERNEL=${kernelrel}
+        cd ${currentdir}
+    done
+fi
+
 for module in ${modulesdir}/*/src ; do
-	echo "Building module $(basename ${module})"
+	echo "Installing module $(basename ${module})"
 	cd ${module}
 	make install BUILD_KERNEL=${kernelrel}
 	cd ${currentdir}
