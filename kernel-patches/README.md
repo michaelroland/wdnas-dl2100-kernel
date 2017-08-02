@@ -22,11 +22,18 @@ convention:
     <YYYYMMDD>-<commit revision hash>-<description>.patch
 
 
+### Version-specific patches
+
+Patches for specific kernel versions may be placed in sub-folders named
+<samp>X.Y.Z/</samp> for patches that apply to only one specific kernel version
+or <samp>X.Y/</samp> for patches that apply to a whole kernel release.
+
+
 ### List of required patches
 
 #### Kernel 3.16.39-1+deb8u2
 
-- <samp>[20150205-eb3d80f729e07394685239ddd137fbee5c13a2ea-acpica\_events\_gpe.patch](20150205-eb3d80f729e07394685239ddd137fbee5c13a2ea-acpica_events_gpe.patch)</samp>:
+- <samp>[3.16.39/20150205-eb3d80f729e07394685239ddd137fbee5c13a2ea-acpica\_events\_gpe.patch](3.16.39/20150205-eb3d80f729e07394685239ddd137fbee5c13a2ea-acpica_events_gpe.patch)</samp>:
   This patch adds the missing API implementation <samp>acpi\_finish\_gpe()</samp>
   that is required for the implementation of the [rstbtn module](../modules/rstbtn/).
 

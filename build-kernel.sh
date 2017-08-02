@@ -106,9 +106,13 @@ if [ "$?" -ne "0" ] ; then
 	exit 5
 fi
 
+kernelvermain=$(echo "${kernelver}" |awk -F'.' '{print$1"."$2}')
 if [ -f "${kernelconfigbase}-${kernelver}.config" ] ; then
 	echo "Applying configuration from $(basename ${kernelconfigbase}-${kernelver}.config)"
 	cp -f "${kernelconfigbase}-${kernelver}.config" .config
+elif [ -f "${kernelconfigbase}-${kernelvermain}.config" ] ; then
+	echo "Applying configuration from $(basename ${kernelconfigbase}-${kernelvermain}.config)"
+	cp -f "${kernelconfigbase}-${kernelvermain}.config" .config
 else
 	echo "Applying configuration from $(basename ${kernelconfigbase}.config)"
 	cp -f "${kernelconfigbase}.config" .config
@@ -120,11 +124,29 @@ else
 	echo -n "${localkernelver}" >.localversion
 fi
 
+if [ -d "${patchesdir}/${kernelver}" ] ; then
+    for patchfile in ${patchesdir}/${kernelver}/*.patch ; do
+        if [ -f ${patchfile} ] ; then
+            echo "Applying patch $(basename ${patchfile}) ..."
+            patch -p1 -l -N <${patchfile}
+        fi
+    done
+fi
+
+if [ -d "${patchesdir}/${kernelvermain}" ] ; then
+    for patchfile in ${patchesdir}/${kernelvermain}/*.patch ; do
+        if [ -f ${patchfile} ] ; then
+            echo "Applying patch $(basename ${patchfile}) ..."
+            patch -p1 -l -N <${patchfile}
+        fi
+    done
+fi
+
 for patchfile in ${patchesdir}/*.patch ; do
-	if [ -f ${patchfile} ] ; then
-		echo "Applying patch $(basename ${patchfile}) ..."
-		patch -p1 -l -N <${patchfile}
-	fi
+    if [ -f ${patchfile} ] ; then
+        echo "Applying patch $(basename ${patchfile}) ..."
+        patch -p1 -l -N <${patchfile}
+    fi
 done
 
 make oldconfig LOCALVERSION=${localkernelver}
