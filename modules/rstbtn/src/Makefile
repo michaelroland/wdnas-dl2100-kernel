@@ -87,3 +87,5 @@ uninstall:
 clean:
 	rm -rf $(DRIVER_NAME).ko $(DRIVER_NAME).o $(DRIVER_NAME).mod.c $(DRIVER_NAME).mod.o $(DRIVER_CFILES:.c=.o) \
 	.*cmd .tmp_versions Module.markers Module.symvers modules.order
+
+endif
