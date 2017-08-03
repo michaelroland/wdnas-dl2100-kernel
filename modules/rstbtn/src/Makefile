@@ -71,10 +71,10 @@ INSTDIR ?= updates/drivers/input
 # Build rules
 
 default:
-	$(MAKE) -C $(KDIR) M=$PWD modules
+	$(MAKE) -C $(KDIR) M=$(PWD) modules
 
 install: default
-	$(MAKE) INSTALL_MOD_DIR=$(INSTDIR) -C $(KDIR) M=$PWD modules_install
+	$(MAKE) INSTALL_MOD_DIR=$(INSTDIR) -C $(KDIR) M=$(PWD) modules_install
 
 uninstall:
 	if [ -e $(KBASEDIR)/$(INSTDIR)/$(DRIVER_NAME).ko ] ; then \
@@ -89,3 +89,4 @@ clean:
 	.*cmd .tmp_versions Module.markers Module.symvers modules.order
 
 endif
+
