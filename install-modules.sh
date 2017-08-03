@@ -99,7 +99,7 @@ for module in ${modulesdir}/*/src ; do
 	cd ${currentdir}
 done
 
-depmod ${kernelrel}
+depmod -a ${kernelrel}
 
 initramfsupdate=update-initramfs.orig.initramfs-tools
 if ! command -v ${initramfsupdate} ; then
